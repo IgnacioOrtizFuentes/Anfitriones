@@ -30,8 +30,7 @@ export function TokenLoginDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">
-                    <Ticket className="mr-2 h-4 w-4" />
+                <Button size="xl" variant="outline" className="h-12 px-8 text-base w-full sm:w-auto">
                     Ya soy anfitrión
                 </Button>
             </DialogTrigger>
