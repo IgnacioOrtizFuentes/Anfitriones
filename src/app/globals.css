@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #6366f1; /* Indigo 500 */
+  --color-brand-foreground: #ffffff;
+  
+  --color-success: #22c55e; /* Green 500 */
+  --color-warning: #eab308; /* Yellow 500 */
+  --color-destructive: #ef4444; /* Red 500 */
+  
+  --color-background: #f8fafc; /* Slate 50 */
+  --color-foreground: #0f172a; /* Slate 900 */
+  
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* Custom Utilities for Mobile First */
+@layer utilities {
+  .btn-touch {
+    @apply h-12 active:scale-95 transition-transform touch-manipulation;
+  }
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-geist-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
