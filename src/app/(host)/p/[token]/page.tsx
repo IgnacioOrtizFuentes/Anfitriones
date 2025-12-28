@@ -1,14 +1,17 @@
+import { use } from "react";
 import { getHostByToken } from "@/actions/host-actions";
-import HostLandingClient from "./host-landing-client";
-import { notFound } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export default async function HostLandingPage({ params }: { params: Promise<{ token: string }> }) {
-    const { token } = await params;
-    const host = await getHostByToken(token);
+export default function HostPage({ params }: { params: Promise<{ token: string }> }) {
+    const { token } = use(params);
+    const data = use(getHostByToken(token));
 
-    if (!host) {
-        notFound();
-    }
-
-    return <HostLandingClient host={host} />;
+    return (
+        <div className="p-6 space-y-6">
+            <h1 className="text-2xl font-bold">Portal Anfitrión</h1>
+            <Link href={`/p/${token}/guests`}><Button>Ver Invitados</Button></Link>
+            <Link href={`/p/${token}/covers`}><Button variant="outline">Mis Covers</Button></Link>
+        </div>
+    );
 }

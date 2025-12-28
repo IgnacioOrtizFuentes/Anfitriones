@@ -8,6 +8,7 @@ import { Calendar, Users, Home, Settings } from "lucide-react";
 const NAV_ITEMS = [
     { label: "Inicio", href: "/dashboard", icon: Home },
     { label: "Eventos", href: "/eventos", icon: Calendar },
+    { label: "Calendario", href: "/calendario", icon: Calendar },
     { label: "RRHH", href: "/anfitriones", icon: Users },
 ];
 

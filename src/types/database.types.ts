@@ -86,6 +86,8 @@ export interface Database {
                     cupo_invitados: number
                     invitados_registrados: number
                     last_seen_at: string | null
+                    cupo_covers: number
+                    covers_usados: number
                 }
                 Insert: {
                     id?: string
@@ -98,6 +100,8 @@ export interface Database {
                     invitados_registrados?: number
                     last_seen_at?: string | null
                     evidencia_url?: string | null
+                    cupo_covers?: number
+                    covers_usados?: number
                 }
                 Update: {
                     id?: string
@@ -110,6 +114,8 @@ export interface Database {
                     invitados_registrados?: number
                     last_seen_at?: string | null
                     evidencia_url?: string | null
+                    cupo_covers?: number
+                    covers_usados?: number
                 }
                 Relationships: [
                     {
@@ -122,6 +128,43 @@ export interface Database {
                         foreignKeyName: "evento_anfitrion_evento_id_fkey"
                         columns: ["evento_id"]
                         referencedRelation: "eventos"
+                        referencedColumns: ["id"]
+                    }
+                ]
+            }
+            covers_canjeados: {
+                Row: {
+                    id: string
+                    created_at: string
+                    evento_anfitrion_id: string
+                    codigo_qr: string
+                    usado: boolean
+                    fecha_uso: string | null
+                    validado_por: string | null
+                }
+                Insert: {
+                    id?: string
+                    created_at?: string
+                    evento_anfitrion_id: string
+                    codigo_qr: string
+                    usado?: boolean
+                    fecha_uso?: string | null
+                    validado_por?: string | null
+                }
+                Update: {
+                    id?: string
+                    created_at?: string
+                    evento_anfitrion_id?: string
+                    codigo_qr?: string
+                    usado?: boolean
+                    fecha_uso?: string | null
+                    validado_por?: string | null
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "covers_canjeados_evento_fkey"
+                        columns: ["evento_anfitrion_id"]
+                        referencedRelation: "evento_anfitrion"
                         referencedColumns: ["id"]
                     }
                 ]

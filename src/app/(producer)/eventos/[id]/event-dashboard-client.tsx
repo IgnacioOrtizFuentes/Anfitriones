@@ -8,16 +8,17 @@ import { Users, CheckCircle, Clock, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { AddHostDialog } from "@/components/add-host-dialog";
+import { CoverAssignment } from "@/components/cover-assignment";
 
 // Define simpler local types based on what we passed from server
-type EventDashboardProps = {
+interface EventDashboardClientProps {
     event: any;
-    stats: any;
     hosts: any[];
-};
+    stats: any;
+}
 
-export default function EventDashboardClient({ event, stats, hosts }: EventDashboardProps) {
-    const [activeTab, setActiveTab] = useState<'general' | 'hosts' | 'validations'>('general');
+export default function EventDashboardClient({ event, hosts, stats }: EventDashboardClientProps) {
+    const [activeTab, setActiveTab] = useState<'general' | 'anfitriones' | 'validations'>('general');
 
     return (
         <div className="space-y-6 pb-20">
@@ -81,8 +82,8 @@ export default function EventDashboardClient({ event, stats, hosts }: EventDashb
                     label="General"
                 />
                 <TabButton
-                    active={activeTab === 'hosts'}
-                    onClick={() => setActiveTab('hosts')}
+                    active={activeTab === 'anfitriones'}
+                    onClick={() => setActiveTab('anfitriones')}
                     label={`Anfitriones (${hosts.length})`}
                 />
                 <TabButton
@@ -101,35 +102,53 @@ export default function EventDashboardClient({ event, stats, hosts }: EventDashb
                     </div>
                 )}
 
-                {activeTab === 'hosts' && (
-                    <div className="grid gap-3">
-                        <div className="flex justify-end mb-2">
+                {activeTab === 'anfitriones' && (
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-lg font-semibold">Lista de Anfitriones</h2>
                             <AddHostDialog eventId={event.id} />
                         </div>
-                        {hosts.map((host) => (
-                            <Card key={host.id} className="overflow-hidden">
-                                <div className="flex items-center p-4 gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold">
-                                        {host.anfitriones?.nombre?.charAt(0) || "?"}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <h4 className="font-medium truncate">{host.anfitriones?.nombre}</h4>
-                                        <div className="text-xs text-slate-500 flex gap-2">
-                                            <span>{host.invitados_registrados}/{host.cupo_invitados} invitados</span>
-                                        </div>
-                                    </div>
-                                    <StatusBadge status={host.estado} />
-                                    {/* Action Button for Mobile */}
-                                    <Button variant="ghost" size="icon">
-                                        <span className="sr-only">Ver</span>
-                                        <div className="h-1 w-1 bg-slate-400 rounded-full translate-x-[2px]" />
-                                        <div className="h-1 w-1 bg-slate-400 rounded-full" />
-                                        <div className="h-1 w-1 bg-slate-400 rounded-full -translate-x-[2px]" />
-                                    </Button>
+                        <Card>
+                            <CardContent className="p-0">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-sm">
+                                        <thead className="bg-slate-50 border-b">
+                                            <tr>
+                                                <th className="p-3 text-left font-medium text-slate-500">Nombre</th>
+                                                <th className="p-3 text-left font-medium text-slate-500">Estado</th>
+                                                <th className="p-3 text-center font-medium text-slate-500">Invitados</th>
+                                                <th className="p-3 text-center font-medium text-slate-500">Covers</th>
+                                                <th className="p-3 text-center font-medium text-slate-500">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y">
+                                            {hosts.map((host: any) => (
+                                                <tr key={host.id} className="hover:bg-slate-50">
+                                                    <td className="p-3 font-medium">{host.anfitriones?.nombre}</td>
+                                                    <td className="p-3">
+                                                        <StatusBadge status={host.estado} />
+                                                    </td>
+                                                    <td className="p-3 text-center">
+                                                        {host.invitados_registrados} / {host.cupo_invitados}
+                                                    </td>
+                                                    <td className="p-3 text-center">
+                                                        <CoverAssignment
+                                                            hostEventId={host.id}
+                                                            currentQuota={host.cupo_covers || 0}
+                                                        />
+                                                    </td>
+                                                    <td className="p-3 text-center">
+                                                        <Link href={`/p/${host.access_token}`}>
+                                                            <Button size="sm" variant="outline">Ver Portal</Button>
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
-                                {/* Expandable actions could go here */}
-                            </Card>
-                        ))}
+                            </CardContent>
+                        </Card>
                     </div>
                 )}
 
